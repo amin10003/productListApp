@@ -45,7 +45,7 @@ function AddProductForm({ onAdd }) {
         placeholder="Category"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        className="focus:outline-none p-2 rounded-md"
+        className="focus:outline-none p-2 focus:ring-2 p-2 rounded-md focus:ring-blue-500"
       />
 
       <input
