@@ -4,27 +4,53 @@ import ProductList from "./Components/ProductList";
 import AddProductForm from "./Components/AddProductForm";
 
 function App() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(() => {
+    const saved = localStorage.getItem("products");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
 
   // FETCH PRODUCTS FROM API
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const res = await fetch("https://fakestoreapi.com/products");
+  //       const data = await res.json();
+  //       setProducts(data);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching products:", error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchProducts();
+  // }, []);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://fakestoreapi.com/products");
-        const data = await res.json();
-        setProducts(data);
-        setLoading(false);
+        if (products.length === 0) {
+          const res = await fetch("https://fakestoreapi.com/products");
+          const data = await res.json();
+          setProducts(data);
+        }
       } catch (error) {
         console.error("Error fetching products:", error);
+      } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
+
+  //saving local storage
+
+  useEffect(() => {
+    localStorage.setItem("products", JSON.stringify(products));
+  }, [products]);
 
   // DELETE PRODUCT
   const deleteProduct = (id) => {
@@ -63,7 +89,7 @@ function App() {
             placeholder="Search products..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border p-3 rounded-md w-full"
+            className="border p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 "
           />
 
           {/* CATEGORY FILTER */}
