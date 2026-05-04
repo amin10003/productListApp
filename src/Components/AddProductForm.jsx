@@ -5,16 +5,18 @@ function AddProductForm({ onAdd }) {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newProduct = {
       id: crypto.randomUUID(),
-      name,
+      title: name,
       price,
       image,
       description,
+      category,
     };
 
     onAdd(newProduct);
@@ -29,13 +31,21 @@ function AddProductForm({ onAdd }) {
     <form
       className="grid grid-cols-2 grid-rows-2 font-semibold p-6 gap-3 shadow-md  "
       onSubmit={handleSubmit}
-    > 
-    <h2 className="tex-3xl font-bold text-center  col-span-2">Add Product Form</h2>
+    >
+      <h2 className="text-3xl font-bold text-center  col-span-2">
+        Add Product Form
+      </h2>
       <input
         className="focus:outline-none focus:ring-2 p-2 rounded-md focus:ring-blue-500"
         placeholder="Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
+      />
+      <input
+        placeholder="Category"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="focus:outline-none p-2 rounded-md"
       />
 
       <input
@@ -53,13 +63,18 @@ function AddProductForm({ onAdd }) {
       />
 
       <input
-        className="focus:outline-none focus:ring-2  p-2 rounded-md focus:ring-blue-500"
+        className="focus:outline-none focus:ring-2  p-2 rounded-md focus:ring-blue-500 col-span-2"
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
 
-      <button className="px-4 py-2 text-white rounded-md font-semibold my-2 bg-blue-500 col-span-2 mx-auto " type="submit">Add Product</button>
+      <button
+        className="px-4 py-2 text-white rounded-md font-semibold my-2 bg-blue-500 col-span-2 mx-auto "
+        type="submit"
+      >
+        Add Product
+      </button>
     </form>
   );
 }

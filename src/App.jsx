@@ -6,6 +6,8 @@ import AddProductForm from "./Components/AddProductForm";
 function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
 
   // FETCH PRODUCTS FROM API
   useEffect(() => {
@@ -39,6 +41,11 @@ function App() {
 
     setProducts([productWithId, ...products]);
   };
+  const filteredProducts = products
+    .filter((p) => (category === "all" ? true : p.category === category))
+    .filter((p) => p.title.toLowerCase().includes(search.toLowerCase()));
+
+  const categories = ["all", ...new Set(products.map((p) => p.category))];
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
@@ -49,7 +56,32 @@ function App() {
       </div>
 
       <div className="max-w-6xl mx-auto">
-        <ProductList products={products} onDelete={deleteProduct} />
+        <div className="max-w-6xl mx-auto mb-6 flex flex-col gap-4">
+          {/* SEARCH */}
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border p-3 rounded-md w-full"
+          />
+
+          {/* CATEGORY FILTER */}
+          <div className="flex gap-3 flex-wrap">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setCategory(cat)}
+                className={`px-3 py-1 rounded ${
+                  category === cat ? "bg-blue-500 text-white" : "bg-gray-200"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+        <ProductList products={filteredProducts} onDelete={deleteProduct} />
       </div>
     </div>
   );
